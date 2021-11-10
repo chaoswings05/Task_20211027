@@ -55,21 +55,26 @@ public:
 
 	~Vehicle() {}
 
-	virtual void SetSpeed(int startSpeed)
+	virtual void SetSpeed(int v)
 	{
-		speed = startSpeed;
-		speed += accel;
+		speed = v;
 		printf("speed:%d\n", speed);
+	}
+
+	virtual void SetAccel(int a)
+	{
+		accel = a;
+		printf("accel:%d\n", accel);
 	}
 
 	virtual void Update()
 	{
-		SetSpeed(20);
+		speed += accel;
 		x += speed;
 		Object::Update(x, y, z);
 	}
 	int speed = 0;
-	int accel = 1;
+	int accel = 0;
 };
 
 class Car : public Vehicle
@@ -79,11 +84,11 @@ public:
 
 	~Car() {}
 
-	void SetSpeed(int startSpeed)
+	void Update()
 	{
-		speed = startSpeed;
 		speed += accel * 10;
-		printf("speed:%d\n", speed);
+		x += speed;
+		Object::Update(x, y, z);
 	}
 };
 
@@ -96,10 +101,8 @@ public:
 
 	void Update()
 	{
-		SetSpeed(50);
-		x += speed;
+		Vehicle::Update();
 		fuel -= speed;
-		Object::Update(x, y, z);
 		printf("fuel=%d\n", fuel);
 	}
 private:
@@ -115,12 +118,11 @@ public:
 
 	void Update()
 	{
-		SetSpeed(30);
-		x += speed - heavy;
-		Object::Update(x, y, z);
+		speed -= heavy;
+		Car::Update();
 	}
 private:
-	int heavy = 5;
+	int heavy = 20;
 };
 
 int main()
@@ -133,11 +135,19 @@ int main()
 
 	object.Update(5,5,5);
 
+	vehicle.SetSpeed(10);
+	vehicle.SetAccel(5);
 	vehicle.Update();
 
+	car.SetSpeed(20);
+	car.SetAccel(10);
 	car.Update();
 
+	bike.SetSpeed(40);
+	bike.SetAccel(20);
 	bike.Update();
 
+	truck.SetSpeed(80);
+	truck.SetAccel(40);
 	truck.Update();
 }
