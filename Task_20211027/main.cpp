@@ -8,9 +8,9 @@ Update関数はvirtualで作ってください。
 
 Vehicle(乗り物)クラス
 Objectクラスを継承したクラス。
-ここではSpeedUpクラスを追加してください。
+ここではsetSpeed関数を追加してください。
 またspeedとaccelの変数をここで追加してください。
-SpeedUpクラスはvirtualで作ってください。
+setSpeed関数はvirtualで作ってください。
 (正確な速度の処理を行いたい場合は、向きと加速度で、
 ベクトルを計算する方法でも構いません。)
 
@@ -55,16 +55,18 @@ public:
 
 	~Vehicle() {}
 
-	virtual void SpeedUp()
+	virtual void SetSpeed(int startSpeed)
 	{
+		speed = startSpeed;
 		speed += accel;
 		printf("speed:%d\n", speed);
 	}
 
 	virtual void Update()
 	{
+		SetSpeed(20);
 		x += speed;
-		printf("x=%d y=%d z=%d\n", x, y, z);
+		Object::Update(x, y, z);
 	}
 	int speed = 0;
 	int accel = 1;
@@ -77,8 +79,9 @@ public:
 
 	~Car() {}
 
-	void SpeedUp()
+	void SetSpeed(int startSpeed)
 	{
+		speed = startSpeed;
 		speed += accel * 10;
 		printf("speed:%d\n", speed);
 	}
@@ -93,9 +96,10 @@ public:
 
 	void Update()
 	{
+		SetSpeed(50);
 		x += speed;
 		fuel -= speed;
-		printf("x=%d y=%d z=%d\n", x, y, z);
+		Object::Update(x, y, z);
 		printf("fuel=%d\n", fuel);
 	}
 private:
@@ -111,8 +115,9 @@ public:
 
 	void Update()
 	{
+		SetSpeed(30);
 		x += speed - heavy;
-		printf("x=%d y=%d z=%d\n", x, y, z);
+		Object::Update(x, y, z);
 	}
 private:
 	int heavy = 5;
@@ -128,15 +133,11 @@ int main()
 
 	object.Update(5,5,5);
 
-	vehicle.SpeedUp();
 	vehicle.Update();
 
-	car.SpeedUp();
 	car.Update();
 
-	bike.SpeedUp();
 	bike.Update();
 
-	truck.SpeedUp();
 	truck.Update();
 }
